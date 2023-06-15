@@ -3,8 +3,6 @@ import UserModel, {UserModelRole} from "@/InterfaceAdapters/repository/models/Us
 import DatabaseError from "../../EnterpriseBusiness/errors/DatabaseError";
 import User from "../../EnterpriseBusiness/entities/user.entity";
 import NotFoundError from "../../EnterpriseBusiness/errors/NotFoundError";
-
-
 export type CreateUserRepository = Omit<User, 'id' | 'lastLoginAttempted'>
 export type CreateAdminRepository = Omit<CreateUserRepository, 'type'>
 export type CreateCooperatingRepository = Omit<CreateUserRepository, 'type'>
@@ -46,7 +44,6 @@ export type UpdateUserForm = KeysToUpdateUserForm & Partial<Omit<User, 'id' | 't
 export default interface IUserRepository {
     createAdmin(user: CreateAdminRepository): Promise<Result<undefined, DatabaseError>>;
     createCustomer(user: CreateCooperatingRepository): Promise<Result<undefined, DatabaseError>>;
-    createEmployee(user: CreateAccountRepository):Promise <Result<undefined, DatabaseError>>;
 
     findByEmail(email: string): Promise<Result<User, NotFoundError | DatabaseError>>;
     findById(id: number): Promise<Result<User, NotFoundError | DatabaseError>>;

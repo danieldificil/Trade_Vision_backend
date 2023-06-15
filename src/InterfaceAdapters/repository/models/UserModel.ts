@@ -2,7 +2,6 @@ import {Entity, Column, PrimaryGeneratedColumn, DeleteDateColumn} from 'typeorm'
 
 export enum UserModelRole {
     Admin = 'ADMIN',
-    Employee = 'EMPLOYEE',
     Customer = 'CUSTOMER',
 }
 

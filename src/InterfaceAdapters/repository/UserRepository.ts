@@ -16,7 +16,6 @@ import NotFoundError from "../../EnterpriseBusiness/errors/NotFoundError";
 const userModelTypeMapper: Record<UserModelRole, UserType> = {
     [UserModelRole.Admin]: UserType.Admin,
     [UserModelRole.Customer]: UserType.Customer,
-    [UserModelRole.Employee]: UserType.Employee,
 }
 
 export class UserRepository implements IUserRepository {
@@ -37,15 +36,6 @@ export class UserRepository implements IUserRepository {
         if (!res.val) return Err(new NotFoundError("User"));
         const userModel = res.val;
         return Ok(undefined);
-    }
-
-    async createEmployee(user: CreateAdminRepository): Promise<Result<undefined, DatabaseError>> {
-        const res = await this.userModel.create({...user, type: UserModelRole.Employee});
-        if (res.err) return res;
-        if (!res.val) return Err(new NotFoundError("User"));
-        const userModel = res.val;
-        return Ok(undefined);
-
     }
 
     async findByEmail(email: string): Promise<Result<User, NotFoundError | DatabaseError>> {

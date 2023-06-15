@@ -17,7 +17,7 @@ export default class UserListUseCase implements IUserListUseCase {
         readonly userRepository: IUserRepository
     ) {}
 
-    @Auth([UserType.Admin, UserType.Employee])
+    @Auth([UserType.Admin])
     @ValidateForm({
         type: validators.string().optional(),
         pageSize: validators.number().optional(),

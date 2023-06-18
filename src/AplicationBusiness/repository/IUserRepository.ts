@@ -49,5 +49,5 @@ export default interface IUserRepository {
     findById(id: number): Promise<Result<User, NotFoundError | DatabaseError>>;
     findAll(query: {id?: number}): Promise<Result<User[], DatabaseError>>;
     paginateUsers<Fields extends keyof User>(query: FindAllUsersForm<Fields>): Promise<Result<paginateUsersResult<Fields>, DatabaseError>>,
-    updateUser(user: UpdateUserForm): Promise<Result<User, DatabaseError>>,
+    updateCustomer(user: UpdateUserForm): Promise<Result<User, DatabaseError>>,
 }

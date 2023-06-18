@@ -1,9 +1,9 @@
 import {Err, Ok, Result} from "ts-results";
 import {
-    ILoginUseCase,
-    LoginUseCaseErrors,
-    LoginUserForm,
-    LoginUserResult
+    ICustomerLoginUseCase,
+    CustomerLoginUseCaseErrors,
+    CustomerLoginForm,
+    CustomerLoginResult
 } from "@/EnterpriseBusiness/useCases/auth/LoginUseCases";
 import validators from "@/AplicationBusiness/validators/Validators";
 import ValidateForm from "@/AplicationBusiness/decorators/ValidateForm";
@@ -12,9 +12,8 @@ import IHashService from "../../services/IHashService";
 import NotFoundError from "../../../EnterpriseBusiness/errors/NotFoundError";
 import LoginInvalidError from "../../../EnterpriseBusiness/errors/LoginInvalidError";
 import ITokenService from "../../services/ITokenService";
-import User from "@/EnterpriseBusiness/entities/user.entity";
 
-export class LoginUseCase implements ILoginUseCase {
+export class CustomerLoginUseCase implements ICustomerLoginUseCase {
 
     constructor(
         readonly userRepository: IUserRepository,
@@ -26,20 +25,20 @@ export class LoginUseCase implements ILoginUseCase {
         email: validators.email(),
         password: validators.password(),
     })
-    async execute(form: LoginUserForm): Promise<Result<LoginUserResult, LoginUseCaseErrors>> {
+    async execute(form: CustomerLoginForm): Promise<Result<CustomerLoginResult, CustomerLoginUseCaseErrors>> {
 
-        const findUserRes = await this.userRepository.findByEmail(form.email);
-        if (findUserRes.err) {
-            if(findUserRes.val instanceof NotFoundError) return Err(new LoginInvalidError());
-            return findUserRes;
+        const getLoggedCustomer  = await this.userRepository.findByEmail(form.email);
+        if (getLoggedCustomer.err) {
+            if(getLoggedCustomer.val instanceof NotFoundError) return Err(new LoginInvalidError());
+            return getLoggedCustomer;
         }
+        const user = getLoggedCustomer.unwrap();
 
-        const user = findUserRes.unwrap();
         if(!this.hashService.compareUserPassword(form.password, user.password)) return Err(new LoginInvalidError());
 
         const token = this.tokenService.generateLoginToken(user);
 
-        const loginUserModel: LoginUserResult = {
+        const loginUserModel: CustomerLoginResult = {
             id: user.id,
             firstName: user.firstName,
             lastName: user.lastName,

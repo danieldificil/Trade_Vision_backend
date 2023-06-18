@@ -1,7 +1,11 @@
 import {Err, Ok, Result} from "ts-results";
 import UserModel, {UserModelRole} from "@/InterfaceAdapters/repository/models/UserModel";
-import {FindOneForm, PaginateForm, RepositoryModel} from "@/InterfaceAdapters/repository/RepositoryModel";
-import IUserRepository, {
+import {
+    FindOneForm,
+    PaginateForm,
+    RepositoryModel
+} from "@/InterfaceAdapters/repository/RepositoryModel";
+import ICustomerRepository, {
     CreateAccountRepository,
     CreateAdminRepository,
     FindAllUsersForm,
@@ -18,7 +22,7 @@ const userModelTypeMapper: Record<UserModelRole, UserType> = {
     [UserModelRole.Customer]: UserType.Customer,
 }
 
-export class UserRepository implements IUserRepository {
+export class CustomerRepository implements ICustomerRepository {
 
     constructor(readonly userModel: RepositoryModel<UserModel>) {
     }
@@ -26,7 +30,7 @@ export class UserRepository implements IUserRepository {
     async createCustomer(user: CreateAccountRepository): Promise<Result<undefined, DatabaseError>> {
         const res = await this.userModel.create({...user, type: UserModelRole.Customer});
         if (res.err) return res;
-        const userModel = res.val;
+
         return Ok(undefined);
     }
 
@@ -34,7 +38,7 @@ export class UserRepository implements IUserRepository {
         const res = await this.userModel.create({...user, type: UserModelRole.Admin});
         if (res.err) return res;
         if (!res.val) return Err(new NotFoundError("User"));
-        const userModel = res.val;
+
         return Ok(undefined);
     }
 
@@ -42,14 +46,15 @@ export class UserRepository implements IUserRepository {
         const res = await this.userModel.findOne({where: {email}});
         if (res.err) return res;
         if (!res.val) return Err(new NotFoundError("User"));
-        const userModel = res.val;
+        const customerModel = res.val;
+
         return Ok({
-            id: userModel.id,
-            email: userModel.email,
-            firstName: userModel.firstName,
-            lastName: userModel.lastName,
-            password: userModel.password,
-            type: userModelTypeMapper[userModel.type],
+            id: customerModel.id,
+            email: customerModel.email,
+            firstName: customerModel.firstName,
+            lastName: customerModel.lastName,
+            password: customerModel.password,
+            type: userModelTypeMapper[customerModel.type],
         });
     }
 
@@ -58,6 +63,7 @@ export class UserRepository implements IUserRepository {
         if (res.err) return res;
         if (!res.val) return Err(new NotFoundError("User"));
         const userModel = res.val;
+
         return Ok({
             id: userModel.id,
             email: userModel.email,
@@ -74,8 +80,9 @@ export class UserRepository implements IUserRepository {
 
         const res = await this.userModel.find({where});
         if (res.err) return res;
-        const usersModel = res.val;
-        return Ok(usersModel.map((userModel) => ({
+        const customersModel = res.val;
+
+        return Ok(customersModel.map((userModel) => ({
             id: userModel.id,
             email: userModel.email,
             firstName: userModel.firstName,
@@ -83,7 +90,6 @@ export class UserRepository implements IUserRepository {
             password: userModel.password,
             type: userModelTypeMapper[userModel.type],
         })));
-
     }
 
     async paginateUsers<Fields extends keyof User>(query: FindAllUsersForm<Fields>): Promise<Result<paginateUsersResult<Fields>, DatabaseError>> {
@@ -110,7 +116,16 @@ export class UserRepository implements IUserRepository {
             page: query.page,
             pageSize: query.pageSize,
         });
+    }
 
+    async updateCustomer(user: UpdateUserForm): Promise<Result<User, DatabaseError>> {
+        const updateCustomerRes = await this.userModel.update(user);
+        if (updateCustomerRes.err) return updateCustomerRes;
+        const updateResponse = updateCustomerRes.val
+
+        const response = this.userToEntity(updateResponse)
+
+        return Ok(response);
     }
 
     private userToUserModelFields(fields: (keyof User)[]): (keyof UserModel)[] {
@@ -130,15 +145,5 @@ export class UserRepository implements IUserRepository {
             password: userModel.password,
             type: userModelTypeMapper[userModel.type],
         }
-    }
-
-    async updateUser(user: UpdateUserForm): Promise<Result<User, DatabaseError>> {
-        const updateCustomerRes = await this.userModel.update(user);
-        if (updateCustomerRes.err) return updateCustomerRes;
-        const updateResponse = updateCustomerRes.val
-
-        const response = this.userToEntity(updateResponse)
-
-        return Ok(response);
     }
 }

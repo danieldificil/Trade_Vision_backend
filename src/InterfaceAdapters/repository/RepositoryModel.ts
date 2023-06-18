@@ -127,4 +127,5 @@ export interface RepositoryModel<Model> {
 	create(model: DeepPartial<Model>): Promise<Result<Model, DatabaseError>>;
 	paginate(options: PaginateForm<Model>): Promise<Result<{items: Model[], total: number}, DatabaseError>>;
 	update(model: DeepPartial<Model>): Promise<Result<Model, DatabaseError>>;
+	softDelete(model:DeepPartial<Model>): Promise<Result<undefined, DatabaseError>>;
 }

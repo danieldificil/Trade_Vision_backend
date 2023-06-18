@@ -1,5 +1,5 @@
 import User from "@/EnterpriseBusiness/entities/user.entity";
-import {UserRepository} from "@/InterfaceAdapters/repository/UserRepository";
+import {CustomerRepository} from "@/InterfaceAdapters/repository/CustomerRepository";
 import TokenService from "@/InterfaceAdapters/services/TokenService";
 import DatabaseError from "@/EnterpriseBusiness/errors/DatabaseError";
 import NotFoundError from "@/EnterpriseBusiness/errors/NotFoundError";
@@ -11,11 +11,11 @@ export type IUserTokenResolverProvider = IUserProvider<string>;
 
 export default class UserTokenResolverProvider implements IUserTokenResolverProvider {
 
-    userRepository: UserRepository;
+    userRepository: CustomerRepository;
 
     tokenService: TokenService;
 
-    constructor(userRepository: UserRepository, tokenService: TokenService) {
+    constructor(userRepository: CustomerRepository, tokenService: TokenService) {
         this.userRepository = userRepository;
         this.tokenService = tokenService;
     }

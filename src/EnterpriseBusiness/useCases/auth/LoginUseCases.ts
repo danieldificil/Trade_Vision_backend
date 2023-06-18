@@ -1,24 +1,22 @@
 import FormError from "@/EnterpriseBusiness/errors/form/FormError";
-import {UserType} from "@/EnterpriseBusiness/entities/user.entity";
+import User, {UserType} from "@/EnterpriseBusiness/entities/user.entity";
 import UseCase from "../useCase";
 import DatabaseError from "../../errors/DatabaseError";
 import LoginInvalidError from "../../errors/LoginInvalidError";
 
+type Token = {token: string}
 
-export interface LoginUserForm {
-    email: string
-    password: string
-}
+export type CustomerLoginForm = Pick<
+    User,
+    'email' |
+    'password'
+    >
 
-export interface LoginUserResult {
-    id: number,
-    firstName: string
-    lastName: string
-    email: string
-    token: string,
-    type: UserType,
-}
+export type CustomerLoginResult = Omit<
+    User,
+    'password'
+    > & Token
 
-export type LoginUseCaseErrors = DatabaseError | FormError | LoginInvalidError;
+export type CustomerLoginUseCaseErrors = DatabaseError | FormError | LoginInvalidError;
 
-export type ILoginUseCase = UseCase<LoginUserForm, LoginUserResult, LoginUseCaseErrors, undefined>;
+export type ICustomerLoginUseCase = UseCase<CustomerLoginForm, CustomerLoginResult, CustomerLoginUseCaseErrors, undefined>;

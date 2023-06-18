@@ -155,4 +155,14 @@ export default class TypeOrmModelAdapter<Model extends ObjectLiteral> implements
 			return Err(new DatabaseError(String(e)));
 		}
 	}
+
+	async softDelete(model: DeepPartial<Model>): Promise<Result<undefined, DatabaseError>> {
+		try {
+			await this.model.softDelete(model.id);
+
+			return Ok(undefined);
+		} catch (e) {
+			return Err(new DatabaseError(String(e)));
+		}
+	}
 }

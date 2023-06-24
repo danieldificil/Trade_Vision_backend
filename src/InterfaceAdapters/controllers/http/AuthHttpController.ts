@@ -24,12 +24,16 @@ export default class AuthHttpController extends HttpController {
 
         const useCaseResult = await this.loginUseCase.execute(form);
         if (useCaseResult.err) return useCaseResult;
-        const customer: LoginResult = useCaseResult.val;
+        const {firstName, lastName, email, type, token}= useCaseResult.val;
 
         return Ok({
             status: HttpStatus.ok,
             body: {
-                customer
+                firstName,
+                lastName,
+                email,
+                type,
+                token
             }
         });
     }

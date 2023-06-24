@@ -1,8 +1,8 @@
 import UserHttpController from "@/InterfaceAdapters/controllers/http/UserHttpController";
 import HttpAuthProviderFactory from "@/Main/factories/providers/HttpAuthProviderFactory";
-import CustomerLoginUseCaseFactory from "@/Main/factories/UseCase/CustomerLoginUseCaseFactory";
-import CustomerRegisterUseCaseFactory from "@/Main/factories/UseCase/CustomerRegisterUseCaseFactory";
-import CustomerListUseCaseFactory from "@/Main/factories/UseCase/CustomerListUseCaseFactory";
+import CustomerLoginUseCaseFactory from "@/Main/factories/UseCase/auth/LoginUseCaseFactory";
+import CustomerRegisterUseCaseFactory from "@/Main/factories/UseCase/user/RegisterUseCaseFactory";
+import CustomerListUseCaseFactory from "@/Main/factories/UseCase/user/ListUseCaseFactory";
 import AuthHttpController from "./InterfaceAdapters/controllers/http/AuthHttpController";
 import "dotenv/config";
 

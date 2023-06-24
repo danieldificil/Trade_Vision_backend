@@ -42,8 +42,8 @@ type KeysToUpdateUserForm = { id: User['id'], type?: UserModelRole }
 export type UpdateUserForm = KeysToUpdateUserForm & Partial<Omit<User, 'id' | 'type'>>;
 
 export default interface IUserRepository {
-    createAdmin(user: CreateAdminRepository): Promise<Result<undefined, DatabaseError>>;
-    createCustomer(user: CreateCooperatingRepository): Promise<Result<undefined, DatabaseError>>;
+    createAdmin(user: CreateAdminRepository): Promise<Result<void, DatabaseError>>;
+    createCustomer(user: CreateCooperatingRepository): Promise<Result<void, DatabaseError>>;
 
     findByEmail(email: string): Promise<Result<User, NotFoundError | DatabaseError>>;
     findById(id: number): Promise<Result<User, NotFoundError | DatabaseError>>;

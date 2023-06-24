@@ -1,22 +1,27 @@
 import FormError from "@/EnterpriseBusiness/errors/form/FormError";
-import User, {UserType} from "@/EnterpriseBusiness/entities/user.entity";
 import UseCase from "../useCase";
 import DatabaseError from "../../errors/DatabaseError";
 import LoginInvalidError from "../../errors/LoginInvalidError";
 
-type Token = {token: string}
+export enum UserType {
+    Admin = 'Admin',
+    Customer = 'Customer',
+}
 
-export type CustomerLoginForm = Pick<
-    User,
-    'email' |
-    'password'
-    >
+export type LoginForm = {
+    email: string,
+    password: string,
+}
 
-export type CustomerLoginResult = Omit<
-    User,
-    'password'
-    > & Token
+export type LoginResult = {
+    firstName: string,
+    lastName: string,
+    type: UserType,
+    email: string,
+    password: string,
+    token: string
+}
 
-export type CustomerLoginUseCaseErrors = DatabaseError | FormError | LoginInvalidError;
+export type LoginUseCaseErrors = DatabaseError | FormError | LoginInvalidError;
 
-export type ICustomerLoginUseCase = UseCase<CustomerLoginForm, CustomerLoginResult, CustomerLoginUseCaseErrors, undefined>;
+export type ICustomerLoginUseCase = UseCase<LoginForm, LoginResult, LoginUseCaseErrors, undefined>;

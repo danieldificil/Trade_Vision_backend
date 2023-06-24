@@ -1,5 +1,5 @@
 import {Ok} from "ts-results";
-import {CustomerLoginResult, ICustomerLoginUseCase} from "@/EnterpriseBusiness/useCases/auth/LoginUseCases";
+import {LoginResult, ICustomerLoginUseCase} from "@/EnterpriseBusiness/useCases/auth/LoginUseCases";
 import {HttpController} from "@/InterfaceAdapters/controllers/http/HttpController";
 import {HttpRequest, HttpResult, HttpStatus} from "@/InterfaceAdapters/gateway/http/Http.types";
 import {Post, Route} from "@/InterfaceAdapters/gateway/http/HttpDecorators";
@@ -27,7 +27,7 @@ export default class AuthHttpController extends HttpController {
 
         const useCaseResult = await this.loginUseCase.execute(form)
         if (useCaseResult.err) return useCaseResult
-        const customer: CustomerLoginResult = useCaseResult.unwrap()
+        const customer: LoginResult = useCaseResult.unwrap()
 
         return Ok({
             status: HttpStatus.ok,
@@ -44,7 +44,7 @@ export default class AuthHttpController extends HttpController {
 
         const useCaseResult = await this.loginUseCase.execute(form)
         if (useCaseResult.err) return useCaseResult
-        const customer: CustomerLoginResult = useCaseResult.unwrap()
+        const customer: LoginResult = useCaseResult.unwrap()
 
         return Ok({
             status: HttpStatus.ok,

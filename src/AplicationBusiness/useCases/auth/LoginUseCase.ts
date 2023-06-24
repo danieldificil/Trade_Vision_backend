@@ -1,9 +1,9 @@
 import {Err, Ok, Result} from "ts-results";
 import {
     ICustomerLoginUseCase,
-    CustomerLoginUseCaseErrors,
-    CustomerLoginForm,
-    CustomerLoginResult
+    LoginUseCaseErrors,
+    LoginForm,
+    LoginResult
 } from "@/EnterpriseBusiness/useCases/auth/LoginUseCases";
 import validators from "@/AplicationBusiness/validators/Validators";
 import ValidateForm from "@/AplicationBusiness/decorators/ValidateForm";
@@ -25,7 +25,7 @@ export class LoginUseCase implements ICustomerLoginUseCase {
         email: validators.email(),
         password: validators.password(),
     })
-    async execute(form: CustomerLoginForm): Promise<Result<CustomerLoginResult, CustomerLoginUseCaseErrors>> {
+    async execute(form: LoginForm): Promise<Result<LoginResult, LoginUseCaseErrors>> {
 
         const {email, password} = form
 
@@ -40,7 +40,7 @@ export class LoginUseCase implements ICustomerLoginUseCase {
 
         const token = this.tokenService.generateLoginToken(user);
 
-        const loginUserModel: CustomerLoginResult = {
+        const loginUserModel: LoginResult = {
             ...user,
             token
         }

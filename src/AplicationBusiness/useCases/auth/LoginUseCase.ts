@@ -1,6 +1,6 @@
 import {Err, Ok, Result} from "ts-results";
 import {
-    ICustomerLoginUseCase,
+    ILoginUseCase,
     LoginUseCaseErrors,
     LoginForm,
     LoginResult
@@ -13,7 +13,7 @@ import NotFoundError from "../../../EnterpriseBusiness/errors/NotFoundError";
 import LoginInvalidError from "../../../EnterpriseBusiness/errors/LoginInvalidError";
 import ITokenService from "../../services/ITokenService";
 
-export class LoginUseCase implements ICustomerLoginUseCase {
+export class LoginUseCase implements ILoginUseCase {
 
     constructor(
         readonly userRepository: IUserRepository,

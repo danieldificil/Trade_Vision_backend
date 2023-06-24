@@ -24,4 +24,4 @@ export type LoginResult = {
 
 export type LoginUseCaseErrors = DatabaseError | FormError | LoginInvalidError;
 
-export type ICustomerLoginUseCase = UseCase<LoginForm, LoginResult, LoginUseCaseErrors, undefined>;
+export type ILoginUseCase = UseCase<LoginForm, LoginResult, LoginUseCaseErrors, undefined>;

@@ -13,7 +13,7 @@ import NotFoundError from "../../../EnterpriseBusiness/errors/NotFoundError";
 import LoginInvalidError from "../../../EnterpriseBusiness/errors/LoginInvalidError";
 import ITokenService from "../../services/ITokenService";
 
-export class CustomerLoginUseCase implements ICustomerLoginUseCase {
+export class LoginUseCase implements ICustomerLoginUseCase {
 
     constructor(
         readonly userRepository: IUserRepository,
@@ -27,24 +27,22 @@ export class CustomerLoginUseCase implements ICustomerLoginUseCase {
     })
     async execute(form: CustomerLoginForm): Promise<Result<CustomerLoginResult, CustomerLoginUseCaseErrors>> {
 
-        const getLoggedCustomer  = await this.userRepository.findByEmail(form.email);
-        if (getLoggedCustomer.err) {
-            if(getLoggedCustomer.val instanceof NotFoundError) return Err(new LoginInvalidError());
-            return getLoggedCustomer;
-        }
-        const user = getLoggedCustomer.unwrap();
+        const {email, password} = form
 
-        if(!this.hashService.compareUserPassword(form.password, user.password)) return Err(new LoginInvalidError());
+        const getLoggedCustomerResult  = await this.userRepository.findByEmail(email);
+        if (getLoggedCustomerResult.err) {
+            if(getLoggedCustomerResult.val instanceof NotFoundError) return Err(new LoginInvalidError());
+            return getLoggedCustomerResult;
+        }
+        const user = getLoggedCustomerResult.val;
+
+        if(!this.hashService.compareUserPassword(password, user.password)) return Err(new LoginInvalidError());
 
         const token = this.tokenService.generateLoginToken(user);
 
         const loginUserModel: CustomerLoginResult = {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            token,
-            type: user.type,
+            ...user,
+            token
         }
 
         return Ok(loginUserModel);
